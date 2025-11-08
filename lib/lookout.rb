@@ -23,7 +23,27 @@ module Lookout
                  end
     end
 
-    def importmap
+    # Rails 8+ one-liner support:
+    # In a host app's config/importmap.rb you can now do:
+    #   Lookout.importmap(self)
+    # This will draw all Lookout pins onto the host's map builder.
+    # If no builder is provided, this returns a standalone Importmap::Map (for inlining).
+    def importmap(builder = nil)
+      if builder
+        builder.pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
+        builder.pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
+        builder.pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true
+        builder.pin "application", to: "lookout/application.js", preload: true
+        builder.pin "chartkick", to: "chartkick.js"
+        builder.pin "Chart.bundle", to: "Chart.bundle.js"
+        builder.pin "chartjs-plugin-datalabels", to: "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2", preload: true
+        builder.pin "classnames", to: "https://cdnjs.cloudflare.com/ajax/libs/classnames/2.3.2/index.min.js", preload: true
+        builder.pin "chartjs-chart-geo", to: "https://cdn.jsdelivr.net/npm/chartjs-chart-geo@4.3.6/build/index.umd.min.js", preload: true
+        builder.pin_all_from Lookout::Engine.root.join("app/assets/javascript/lookout/controllers"), under: "controllers", to: "lookout/controllers"
+        builder.pin_all_from Lookout::Engine.root.join("app/assets/javascript/lookout/helpers"), under: "helpers", to: "lookout/helpers"
+        return builder
+      end
+
       Importmap::Map.new.draw do
         pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
         pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true

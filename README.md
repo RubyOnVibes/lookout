@@ -31,6 +31,24 @@ $ bundle add lookout
 $ rails g lookout:install
 ```
 
+### 2.5. Rails 8+ Importmap (one‑liner)
+
+In your host app’s `config/importmap.rb`, add a single line to pull in Lookout’s pins:
+
+```ruby
+# your app’s pins…
+pin "application"
+pin "@hotwired/turbo-rails", to: "turbo.min.js"
+pin "@hotwired/stimulus", to: "stimulus.min.js"
+pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
+pin_all_from "app/javascript/controllers", under: "controllers"
+
+# Lookout (one-liner)
+Lookout.importmap(self)
+```
+
+This avoids referencing `Lookout::Engine.root` from your app. For older importmap-rails, Lookout also inlines its own importmap via `lookout_importmap_tags`.
+
 ### 3. Make sure your events are setup correctly
 
 Lookout doesn't do any tracking for you; it merely provides a dashboard for your data from the Ahoy gem. 
