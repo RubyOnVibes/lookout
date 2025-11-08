@@ -1,4 +1,4 @@
-# Lookout
+# Lookout [Ahoy](https://github.com/ankane/ahoy)
 
 [![Gem Version](https://badge.fury.io/rb/lookout.svg)](https://badge.fury.io/rb/lookout)
 [![Test Coverage](https://img.shields.io/badge/coverage-4.05%25-brightgreen.svg)](coverage/index.html)
