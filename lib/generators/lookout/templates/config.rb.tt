@@ -70,7 +70,7 @@ Lookout.configure do |config|
 
   # ==> Time periods
   #
-  # Defaults come from lib/ahoy_captain/period_collection.rb
+  # Defaults come from lib/lookout/period_collection.rb
   #
   # If you want your own entirely, first call reset.
   # config.ranges.reset
@@ -100,7 +100,7 @@ Lookout.configure do |config|
 
   # ==> Filters
   #
-  # Defaults come from lib/ahoy_captain/filter_configuration.rb
+  # Defaults come from lib/lookout/filters_configuration.rb
   #
   # If you want your own entirely, first call reset.
   # config.filters.reset
@@ -159,7 +159,7 @@ Lookout.configure do |config|
   #   end
 
   # ==> Funnels
-  # Your mother definitely didn't tell you about conversation rate.
+  # Your mother definitely didn't tell you about conversion rate.
   # Except, you're here, so...
   #
   # Basically:
