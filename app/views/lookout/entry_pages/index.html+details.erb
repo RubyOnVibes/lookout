@@ -1,0 +1,4 @@
+<%= turbo_frame_tag :details do %>
+  <%= render Lookout::TableComponent.new(items: @pages, category_name: 'Entry Pages', unit_name: 'Visitors') %>
+  <span class="flex justify-center"><%= render_pagination %></span>
+<% end %>

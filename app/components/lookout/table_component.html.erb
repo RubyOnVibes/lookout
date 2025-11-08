@@ -1,0 +1,16 @@
+<div class="flex flex-col <%= 'min-h-[380px]' if fixed_height? %> w-full pt-4">
+  <%= render @header %>
+  <div class='<%= 'min-h-[420px]' if fixed_height? %>'>
+    <div class="grow">
+      <% if items.respond_to?(:each) && items.any? %>
+        <% items.each do |item| %>
+          <div class='flex items-center relative rounded-sm overflow-hidden h-8 my-2 bg-gray-400'>
+            <%= render_row(item) %>
+          </div>
+        <% end %>
+      <% else %>
+        <p>No data found</p>
+      <% end %>
+    </div>
+  </div>
+</div>

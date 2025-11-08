@@ -1,0 +1,32 @@
+<div class=" sticky top-0 min-h-sm z-[99999] py-6 bg-base-100">
+  <div class="max-w-6xl mx-auto max-w-6xl flex justify-between ">
+    <div class="flex items-center">
+      <a href="<%= Lookout.config.return_path %>" class="text-lg font-medium hover:text-primary transition-colors py-2">
+        <%= Lookout.config.return_copy %>
+      </a>
+      <% if tag_list_hidden? %>
+        <%= render Lookout::Filter::TagContainerComponent.new %>
+      <% else %>
+        <%= realtime_update %>
+      <% end %>
+    </div>
+    <div class="flex flex-row-reverse col-span-2 items-center gap-3">
+      <%= render Lookout::ComparisonLinkComponent.new %>
+      <%= render Lookout::PreviousNextComponent.new(range) %>
+
+      <%= render Lookout::DropdownLinkComponent.new(title: params[:start_date] ? custom_range_label : (Lookout.config.ranges.find(params[:period] || Lookout.config.ranges.default).try(:label) || "Period"), classes: 'btn btn-sm btn-base-100 no-underline hover:bg-base-100') do |dropdown| %>
+        <% dropdown.with_option do %>
+          <% Lookout.config.ranges.each do |param, range| %>
+            <a class='link no-underline' href="<%= request.path %>?<%= request.query_parameters.except("start_date", "end_date", "date", "compare_to_start_date", "compare_to_end_date").merge("period" => param).to_query %>"><%= range.label %></a>
+          <% end %>
+
+          <a class='link no-underline ' href='#' onclick="event.preventDefault(); customRangeModal.showModal()">Custom Range</a>
+          <a class='link no-underline ' href='<%= Lookout::Engine.routes.url_helpers.root_path(**helpers.search_params.merge(comparison: !compare_mode?)) %>'><%= compare_mode? ? "Disable Comparison" : "Compare" %></a>
+        <% end %>
+      <% end %>
+
+      <%= render Lookout::Filter::DropdownComponent.new(filters: filters) %>
+    </div>
+  </div>
+
+</div>

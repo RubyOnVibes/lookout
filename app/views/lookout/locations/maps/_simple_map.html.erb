@@ -1,0 +1,26 @@
+<%= turbo_frame_tag :geography do %>
+  <div class="w-full h-96 flex items-center justify-center bg-base-300 rounded-lg p-4">
+    <div class="text-center space-y-4 w-full">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-4xl mx-auto">
+        <% @countries.sort_by { |_, count| -count }.each do |country_code, count| %>
+          <div class="bg-base-200 rounded-lg p-3 hover:bg-base-100 transition-colors">
+            <div class="text-2xl mb-1"><%= country_flag(country_code) %></div>
+            <div class="font-semibold text-sm"><%= country_code %></div>
+            <div class="text-xs text-gray-400"><%= count %> visits</div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%# Helper method to get country flag emoji %>
+<% 
+def country_flag(code)
+  return "🌍" if code.nil?
+  # Convert country code to flag emoji
+  code.upcase.chars.map { |c| (c.ord + 127397).chr(Encoding::UTF_8) }.join
+rescue
+  "🌍"
+end
+%>

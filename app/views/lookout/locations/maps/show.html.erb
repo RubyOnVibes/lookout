@@ -1,0 +1,106 @@
+<%= turbo_frame_tag :geography do %>
+  <div style="width: 100%; height: 400px; position: relative;">
+    <canvas id="geo-map-canvas" style="width: 100%; height: 100%;"></canvas>
+  </div>
+  
+  <script type="module">
+    import CountryMap from '<%= asset_path("lookout/helpers/countries.js") %>';
+    
+    (function() {
+      const countryData = <%= raw @countries.to_json %>;
+      
+      // Build numeric to ISO-2 mapping from our country data
+      const numericToIso = {};
+      Object.keys(CountryMap).forEach(key => {
+        numericToIso[CountryMap[key]['Numeric code']] = key;
+      });
+      
+      // Load Chart.js first
+      const chartScript = document.createElement('script');
+      chartScript.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+      chartScript.onload = function() {
+        console.log('Chart.js loaded');
+        
+        // Then load ChartGeo
+        const geoScript = document.createElement('script');
+        geoScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-chart-geo@4.3.6/build/index.umd.min.js';
+        geoScript.onload = function() {
+          console.log('ChartGeo loaded');
+          
+          // Now render the map
+          const canvas = document.getElementById('geo-map-canvas');
+          if (!canvas) {
+            console.error('Canvas not found');
+            return;
+          }
+          
+          fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json')
+            .then(r => r.json())
+            .then(data => {
+              console.log('World atlas loaded');
+              console.log('Country data from server:', countryData);
+              
+              const countries = ChartGeo.topojson.feature(data, data.objects.countries).features;
+              
+              // Map country codes to values using the numeric ID
+              countries.forEach(country => {
+                const isoCode = numericToIso[country.id];
+                country.value = isoCode ? (countryData[isoCode] || 0) : 0;
+                if (country.value > 0) {
+                  console.log(`Matched ${country.properties.name} (${country.id} -> ${isoCode}): ${country.value}`);
+                }
+              });
+              
+              const dataWithValues = countries.filter(d => d.value > 0);
+              console.log(`Countries with data: ${dataWithValues.length}`, dataWithValues.map(d => ({name: d.properties.name, value: d.value})));
+              
+              return countries;
+            })
+            .then(countries => {
+              new Chart(canvas.getContext('2d'), {
+                type: 'choropleth',
+                data: {
+                  labels: countries.map(d => d.properties.name),
+                  datasets: [{
+                    label: 'Visits',
+                    data: countries.map(d => ({feature: d, value: d.value}))
+                  }]
+                },
+                options: {
+                  showOutline: false,
+                  showGraticule: false,
+                  plugins: {
+                    legend: { display: false }
+                  },
+                  scales: {
+                    projection: {
+                      axis: 'x',
+                      projection: 'equalEarth'
+                    },
+                    color: {
+                      axis: 'x',
+                      quantize: 5,
+                      legend: {
+                        position: 'bottom-right',
+                        align: 'right'
+                      }
+                    }
+                  }
+                }
+              });
+              console.log('Map rendered successfully');
+            })
+            .catch(err => console.error('Map error:', err));
+        };
+        geoScript.onerror = function() {
+          console.error('Failed to load ChartGeo');
+        };
+        document.head.appendChild(geoScript);
+      };
+      chartScript.onerror = function() {
+        console.error('Failed to load Chart.js');
+      };
+      document.head.appendChild(chartScript);
+    })();
+  </script>
+<% end %>

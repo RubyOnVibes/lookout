@@ -1,0 +1,23 @@
+<a href="<%= @url %>" class="relative px-4 md:px-6 w-1/2 my-4 lg:w-auto group cursor-pointer" data-controller="frame-link" data-turbo-frame="chart">
+  <div>
+    <h5 class="text-sm font-bold uppercase whitespace-nowrap flex w-content border-transparent tooltip tooltip-bottom	"
+        data-active-links-target="link">
+      <%= @label %>
+    </h5>
+    <div class="my-1 space-y-2">
+      <div>
+        <span class="flex items-center justify-between whitespace-nowrap">
+          <p class="font-bold text-xl"><%= formatted(@value) %></p>
+        </span>
+      </div>
+      <div style="height: 30px; width: 100px;">
+        <canvas 
+          data-controller="sparkline"
+          data-sparkline-label-value="<%= @label %>"
+          width="100" 
+          height="30">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</a>

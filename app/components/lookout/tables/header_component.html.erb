@@ -1,0 +1,6 @@
+<div class="flex text-sm font-bold  mb-4">
+  <% @headers.each_with_index do |header, index| %>
+  <% is_last = index == @headers.length - 1 %>
+  <span class="<%= header[:grow] ? 'grow pl-4' : "w-16 text-right #{is_last ? 'pl-4' : 'pl-6'} pr-2 border-l-gray border-base-300" %>"><%= header[:label] %></span>
+  <% end %>
+</div>

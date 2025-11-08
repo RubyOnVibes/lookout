@@ -1,0 +1,17 @@
+module Lookout
+  module Stats
+    class ViewsPerVisitQuery < BaseQuery
+      def build
+        events = event_query
+                   .joins(:visit)
+                   .select("#{::Lookout.visit.table_name}.started_at as started_at, count(#{Lookout.event.table_name}.name) / count(distinct #{Lookout.event.table_name}.visit_id) as views_per_visit")
+                   .where(name: Lookout.config.event[:view_name])
+                   .group("#{Lookout.visit.table_name}.started_at, #{Lookout.event.table_name}.visit_id")
+
+        ::Ahoy::Visit
+                     .select("views_per_visit as views_per_visit")
+                     .from(events, :views_per_visit_table)
+      end
+    end
+  end
+end

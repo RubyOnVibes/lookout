@@ -1,0 +1,15 @@
+<%= turbo_frame_tag :goals do %>
+  <div class="p-4">
+    <% if params.dig(:q, :goal_id) %>
+      <p>Funnels are unavailable if filtering by a goal.</p>
+    <% elsif @funnel.steps.empty? %>
+      <p class="text-gray-400">No funnel data available. Make sure your events match the configured goals.</p>
+    <% else %>
+      <div style="height: 400px; width: 100%; display: flex; justify-content: center; align-items: center; position: relative; overflow: visible;">
+        <div style="width: 70%; height: 100%; position: relative;">
+          <canvas data-controller="funnel-chart" data-data="<%= @funnel.to_json %>"></canvas>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

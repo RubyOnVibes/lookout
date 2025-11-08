@@ -1,0 +1,6 @@
+<%= turbo_frame_tag :goals do %>
+  <%= render 'lookout/properties/form', selected: Base64.strict_decode64(params[:id]) %>
+
+  <%= render Lookout::TableComponent.new(items: @properties,
+                                             table: ::Lookout::Tables::PropertiesTableComponent) %>
+<% end %>

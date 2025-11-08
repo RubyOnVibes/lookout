@@ -1,0 +1,7 @@
+class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version %>
+  def change
+    add_index :<%= ::Lookout.visit.table_name %>, :started_at unless index_exists?(:<%= ::Lookout.visit.table_name %>, :started_at)
+    add_index :<%= ::Lookout.event.table_name %>, :visit_id unless index_exists?(:<%= ::Lookout.event.table_name %>, :visit_id)
+    add_index :<%= ::Lookout.event.table_name %>, :time unless index_exists?(:<%= ::Lookout.event.table_name %>, :time)
+  end
+end

@@ -1,0 +1,4 @@
+<% ::Lookout::FilterParser.parse(request).each do |_, filter| %>
+  <%= render Lookout::Filter::TagComponent.new(tag_item: filter) %>
+<% end %>
+

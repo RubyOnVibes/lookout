@@ -1,0 +1,189 @@
+<main class='w-screen	overflow-hidden' data-action="combobox:init@window->application#comboboxInit">
+  <script id="tile-loader-template" type="template/html">
+    <%= render '/lookout/layouts/shared/tile_loader' %>
+  </script>
+  <%= render Lookout::StickyNavComponent.new do |nav| %>
+    <% nav.with_realtime_update do %>
+      <%= turbo_frame_tag :realtime, src: realtime_path, data: { controller:  "realtime", "realtime-interval-value" => Lookout.config.realtime_interval.to_i }, loading: :lazy %>
+    <% end %>
+  <% end %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 grid-flow-row gap-4 min-h-screen pb-4 max-w-6xl mx-auto">
+    <%= render Lookout::TileComponent.new(wide: true, classes: "p-4 m-2") do |component| %>
+      <% component.with_statistic_display do %>
+        <%= turbo_frame_tag :stats, src: stats_path(search_params), loading: :lazy, skeleton: false do %>
+          <div class="grid grid-cols-1 divide-y divide-base-200 overflow-hidden rounded-lg grid-cols-2 md:grid-cols-6 md:divide-y-0">
+            <% 6.times do %>
+              <div class="relative px-4 md:px-6 w-1/2 my-4 w-auto group cursor-pointer" >
+                <div role="status" class="max-w-sm animate-pulse">
+                  <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[120px] mb-2.5"></div>
+                  <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 max-w-[60px]"></div>
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <%= turbo_frame_tag :chart, src: stats_unique_visitors_path(search_params) do %>
+          <div role="status" class="p-4 animate-pulse md:p-6">
+            <div class="flex items-baseline mt-4 space-x-6">
+              <div class="w-full bg-gray-200 rounded-t-lg h-72 dark:bg-gray-700"></div>
+              <div class="w-full h-56 bg-gray-200 rounded-t-lg dark:bg-gray-700"></div>
+              <div class="w-full bg-gray-200 rounded-t-lg h-72 dark:bg-gray-700"></div>
+              <div class="w-full h-64 bg-gray-200 rounded-t-lg dark:bg-gray-700"></div>
+              <div class="w-full bg-gray-200 rounded-t-lg h-80 dark:bg-gray-700"></div>
+              <div class="w-full bg-gray-200 rounded-t-lg h-72 dark:bg-gray-700"></div>
+              <div class="w-full bg-gray-200 rounded-t-lg h-80 dark:bg-gray-700"></div>
+            </div>
+            <span class="sr-only">Loading...</span>
+          </div>
+        <% end %>
+      <% end %>
+
+    <% end %>
+
+    <%= render Lookout::TileComponent.new(title: 'Top Sources') do |component| %>
+      <% component.with_display_links do  %>
+        <div class="flex text-xs font-medium text-gray-400 space-x-2">
+          <div class="relative inline-block text-left">
+            <%= component.link_to "All", sources_path(search_params), data: { turbo_frame: "sources" } %>
+            <%= render Lookout::DropdownLinkComponent.new(title: "Campaign") do |dropdown| %>
+              <% %w{utm_source utm_medium utm_term utm_content utm_campaign}.each do |source| %>
+                <%= dropdown.link_to source.titleize.gsub("Utm", "UTM"), public_send("campaign_#{source}_path".to_sym, **search_params), data: { turbo_frame: "sources" } %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+
+
+      <% end %>
+      <% component.with_statistic_display do %>
+        <%= turbo_frame_tag :sources, src: sources_path(search_params), loading: :lazy do %>
+          <%= render '/lookout/layouts/shared/tile_loader' %>
+        <% end %>
+      <% end %>
+      <% component.with_details_cta do %>
+        <button data-action="click->details-modal#openModal" data-controller="details-modal" data-details-modal-target-value="#sources" class="link no-underline ">Details</button>
+      <% end %>
+    <% end %>
+
+    <%= render Lookout::TileComponent.new(title: 'Top Pages') do |component| %>
+      <% component.with_display_links do %>
+        <div class="flex text-xs font-medium text-gray-400 space-x-2">
+          <div class="relative inline-block text-left"><div>
+            <%= component.link_to "Top Pages", top_pages_path(search_params), data: { action: "click->tile#setTitle", turbo_frame: "pages" } %>
+            <%= component.link_to "Entry Pages", entry_pages_path(search_params), data: { action: "click->tile#setTitle", turbo_frame: "pages" } %>
+            <%= component.link_to "Exit Pages", exit_pages_path(search_params), data: { action: "click->tile#setTitle", turbo_frame: "pages" } %>
+          </div>
+          </div>
+        </div>
+
+      <% end %>
+      <% component.with_statistic_display do %>
+        <%= turbo_frame_tag :pages, src: top_pages_path(search_params), loading: :lazy do %>
+          <%= render '/lookout/layouts/shared/tile_loader' %>
+        <% end %>
+      <% end %>
+      <% component.with_details_cta do %>
+        <button data-action="click->details-modal#openModal" data-controller="details-modal"  data-details-modal-target-value="#pages" class="link no-underline ">Details</button>
+      <% end %>
+    <% end %>
+
+    <%= render Lookout::TileComponent.new(title: 'Map') do |component| %>
+      <% component.with_display_links do %>
+        <div class="flex text-xs font-medium text-gray-400 space-x-2">
+          <div class="relative inline-block text-left">
+            <%= component.link_to "Map", locations_map_path(search_params), data: { action: "click->tile#setTitle", turbo_frame: "geography" } %>
+            <%= component.link_to "Countries", locations_countries_path(search_params), data: { action: "click->tile#setTitle", turbo_frame: "geography" } %>
+            <%= component.link_to "Regions", locations_regions_path(search_params), data: { action: "click->tile#setTitle", turbo_frame: "geography" } %>
+            <%= component.link_to "Cities", locations_cities_path(search_params), data: { action: "click->tile#setTitle", turbo_frame: "geography" } %>
+          </div>
+        </div>
+      <% end %>
+      <% component.with_statistic_display do %>
+        <%= turbo_frame_tag :geography, src: locations_map_path(search_params), loading: :lazy do %>
+          <%= render '/lookout/layouts/shared/tile_loader' %>
+
+        <% end %>
+      <% end %>
+      <% component.with_details_cta do %>
+        <button data-action="click->details-modal#openModal" data-controller="details-modal" data-details-modal-target-value="#geography" class="link no-underline ">Details</button>
+      <% end %>
+    <% end %>
+
+    <%= render Lookout::TileComponent.new(title: 'Devices') do |component| %>
+      <% component.with_display_links do %>
+        <div class="flex text-xs font-medium text-gray-400 space-x-2">
+          <div class="relative inline-block text-left">
+            <%= component.link_to "Browser", devices_browsers_path(search_params), data: { turbo_frame: "devices" } %>
+            <%= component.link_to "OS", devices_operating_systems_path(search_params), data: { turbo_frame: "devices" } %>
+            <%= component.link_to "Size", devices_device_types_path(search_params), data: { turbo_frame: "devices" } %>
+          </div>
+        </div>
+      <% end %>
+      <% component.with_statistic_display do %>
+        <%= turbo_frame_tag :devices, src: devices_browsers_path(search_params), loading: :lazy do %>
+          <%= render '/lookout/layouts/shared/tile_loader' %>
+
+        <% end %>
+      <% end %>
+      <% component.with_details_cta do %>
+        <button data-action="click->details-modal#openModal" data-controller="details-modal" data-details-modal-target-value="#devices" class="link no-underline ">Details</button>
+      <% end %>
+    <% end %>
+    <%= render Lookout::TileComponent.new(title: "Funnels", wide: true, classes: "p-4 m-2") do |component| %>
+      <% component.with_display_links do %>
+        <div>
+          <div >
+            <div class="flex text-xs font-medium text-gray-400 space-x-2">
+              <div class="relative inline-block text-left">
+                <a href="<%= goals_path(search_params) %>" data-turbo-frame="goals" class="inline-block h-5 font-semibold" data-controller="frame-link" data-action="click->tile#setTitle">Goals</a>
+                <a href="<%= properties_path(search_params) %>" data-turbo-frame="goals" class="inline-block h-5 font-semibold" data-controller="frame-link" data-action="click->tile#setTitle">Properties</a>
+                <div class="dropdown dropdown-end inline-block" data-controller='dropdown-label'>
+                  <label
+                    tabindex="0"
+                    class="cursor-pointer inline-block h-5 font-semibold"
+                    data-action='click->dropdown-label#removeHidden'
+                    data-funnel-dropdown-label
+                    data-turbo-frame="goals"
+                    >
+                    <span data-dropdown-label-target="label">Funnels</span>
+                  </label>
+                  <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52" data-dropdown-label-target="close">
+                    <% Lookout.config.funnels.each do |id, funnel| %>
+                      <li data-action="click->dropdown-label#setLabel">
+                        <a href="<%= funnel_path(id, search_params) %>" data-turbo-frame="goals" class="link" data-action="click->tile#setTitle" data-funnel-link title="<%= funnel.title %>">
+                          <%= funnel.title %>
+                        </a>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      <% end %>
+      <% component.with_statistic_display do %>
+        <div class="pl-4 pb-4">
+          <%= turbo_frame_tag :goals, src: goals_path(search_params), loading: :lazy do %>
+            <%= render '/lookout/layouts/shared/tile_loader' %>
+          <% end %>
+
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</main>
+
+<%= render 'lookout/roots/filters' %>
+
+<dialog id="detailsModal" class="modal">
+  <div class="modal-box w-11/12 max-w-5xl">
+    <%= turbo_frame_tag :details %>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
