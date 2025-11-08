@@ -25,9 +25,19 @@ module Lookout
     end
 
     def number_to_duration(duration)
-      if duration
-        minutes = duration.in_minutes.to_i
-        seconds = (duration.in_seconds.to_i % 60)
+      seconds =
+        case duration
+        when nil
+          nil
+        when ActiveSupport::Duration
+          duration.in_seconds
+        else
+          duration.to_f
+        end
+
+      if seconds && seconds > 0
+        minutes = (seconds / 60).to_i
+        seconds = (seconds % 60).to_i
         "#{minutes}m #{seconds}s"
       else
         "0m 0s"
