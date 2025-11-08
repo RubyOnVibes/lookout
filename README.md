@@ -22,7 +22,7 @@ Lookout supports **PostgreSQL** and **SQLite**.
 Drop it in:
 
 ```bash
-$ bundle add lookout
+$ bundle add lookout-ahoy
 ```
 
 ### 2. Install it

@@ -1,7 +1,7 @@
 require_relative "lib/lookout/version"
 
 Gem::Specification.new do |spec|
-  spec.name        = "lookout"
+  spec.name        = "lookout-ahoy"
   spec.version     = Lookout::VERSION
   spec.authors     = ["nativestranger"]
   spec.email       = ["eric@rubyonvibes.com"]
