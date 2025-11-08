@@ -31,7 +31,7 @@ $ bundle add lookout
 $ rails g lookout:install
 ```
 
-### 2.5. Rails 8+ Importmap (one‑liner)
+### 2.5. Rails 8+ Importmap
 
 In your host app’s `config/importmap.rb`, add a single line to pull in Lookout’s pins:
 
@@ -43,7 +43,7 @@ pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 
-# Lookout (one-liner)
+# Lookout Analytics
 Lookout.importmap(self)
 ```
 
