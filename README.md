@@ -70,10 +70,6 @@ If you have a large dataset (> 1GB) you probably want some indexes. `rails g loo
 * CSV exports
 * Date comparison
 
-## Coming soon ™️
-
-* Bug fixes and performance improvements
-
 ## Contributions
 
 All are welcome to contribute.
