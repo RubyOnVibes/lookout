@@ -69,7 +69,7 @@ module Lookout
       end
 
       def number_to_percentage(number, options = {})
-        precision = options.fetch(:precision, 2)
+        precision = options.fetch(:precision, 0)
         "#{number.round(precision)}%"
       end
 

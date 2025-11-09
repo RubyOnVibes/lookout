@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "stimulus-rails", ">= 1.1"
   spec.add_dependency "ahoy_matey", ">= 1.1"
   spec.add_dependency "groupdate", ">= 5.0"
-  spec.add_dependency "pagy", ">= 9.0"
+  spec.add_dependency "pagy", ">= 9.0", "< 44"
   spec.add_dependency "rubyzip"
   # Ruby 3.4+ compatibility - these were removed from stdlib
   spec.add_dependency "base64", "~> 0.2"

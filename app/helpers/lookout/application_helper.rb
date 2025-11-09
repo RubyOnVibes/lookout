@@ -1,7 +1,5 @@
 module Lookout
   module ApplicationHelper
-    include Pagy::Frontend
-
     def current_property_filter
       return nil unless params[:q]
 
@@ -45,7 +43,7 @@ module Lookout
     end
 
     def number_to_percentage(number, options = {})
-      precision = options.fetch(:precision, 2)
+      precision = options.fetch(:precision, 0)
       "#{number.round(precision)}%"
     end
 
@@ -115,7 +113,7 @@ module Lookout
 
     def render_pagination
       if @pagination
-        pagy_nav(@pagination).html_safe
+        @pagination.series_nav.html_safe
       else
         ""
       end

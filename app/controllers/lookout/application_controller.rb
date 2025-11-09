@@ -1,6 +1,6 @@
 module Lookout
   class ApplicationController < ActionController::Base
-    include Pagy::Backend
+    include Pagy::Method
     include CompareMode
     include RangeOptions
     include Rangeable
