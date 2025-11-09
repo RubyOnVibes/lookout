@@ -96,4 +96,4 @@ All are welcome to contribute.
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
-<img src="logo.png" style="max-height:100px" />
+<img src="logo.png" style="max-width:90vw; width:auto; display:block; margin: 0 auto;" />
