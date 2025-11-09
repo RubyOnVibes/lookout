@@ -23,8 +23,8 @@ RSpec.describe Lookout::ApplicationHelper, type: :helper do
   end
 
   describe "#number_to_percentage" do
-    it "rounds to 2 decimals by default" do
-      expect(helper.number_to_percentage(10.8145)).to eq("10.81%")
+    it "rounds to 0 decimals by default" do
+      expect(helper.number_to_percentage(10.8145)).to eq("11%")
     end
 
     it "respects custom precision" do
@@ -33,11 +33,11 @@ RSpec.describe Lookout::ApplicationHelper, type: :helper do
     end
 
     it "handles whole numbers" do
-      expect(helper.number_to_percentage(50.0)).to eq("50.0%")
+      expect(helper.number_to_percentage(50.0)).to eq("50%")
     end
 
     it "handles zero" do
-      expect(helper.number_to_percentage(0.0)).to eq("0.0%")
+      expect(helper.number_to_percentage(0.0)).to eq("0%")
     end
   end
 
@@ -140,7 +140,7 @@ RSpec.describe Lookout::ApplicationHelper, type: :helper do
     it "renders pagy nav when pagination exists" do
       pagination = double("Pagy")
       helper.instance_variable_set(:@pagination, pagination)
-      allow(helper).to receive(:pagy_nav).with(pagination).and_return("<nav>test</nav>")
+      allow(pagination).to receive(:series_nav).and_return("<nav>test</nav>")
       
       expect(helper.render_pagination).to eq("<nav>test</nav>")
     end
