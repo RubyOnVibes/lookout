@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lookout-ahoy (0.5.0)
+    lookout-ahoy (0.6.0)
       ahoy_matey (>= 1.1)
       base64 (~> 0.2)
       bigdecimal (~> 3.1)
