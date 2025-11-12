@@ -34,6 +34,8 @@ module Lookout
         builder.pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
         builder.pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true
         builder.pin "application", to: "lookout/application.js", preload: true
+        # Chart.js must be pinned BEFORE its plugins
+        builder.pin "chart.js", to: "https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js", preload: true
         builder.pin "chartjs-plugin-datalabels", to: "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2", preload: true
         builder.pin "classnames", to: "https://cdnjs.cloudflare.com/ajax/libs/classnames/2.3.2/index.min.js", preload: true
         builder.pin "chartjs-chart-geo", to: "https://cdn.jsdelivr.net/npm/chartjs-chart-geo@4.3.6/build/index.umd.min.js", preload: true
@@ -47,6 +49,8 @@ module Lookout
         pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
         pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true
         pin "application", to: "lookout/application.js", preload: true
+        # Chart.js must be pinned BEFORE its plugins
+        pin "chart.js", to: "https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js", preload: true
         pin "chartjs-plugin-datalabels", to: "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2", preload: true
         pin "classnames", to: "https://cdnjs.cloudflare.com/ajax/libs/classnames/2.3.2/index.min.js", preload: true
         pin "chartjs-chart-geo", to: "https://cdn.jsdelivr.net/npm/chartjs-chart-geo@4.3.6/build/index.umd.min.js", preload: true

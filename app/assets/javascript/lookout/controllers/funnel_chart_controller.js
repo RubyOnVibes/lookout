@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
-import 'chartjs-plugin-datalabels';
+// NOTE: chartjs-plugin-datalabels is imported globally in application.js
+// Do NOT import it here - it causes race conditions with Chart.js initialization
 import { getCSS, externalTooltipHandler } from "helpers/chart_utils";
 
 const calculatePercentageDifference = function(oldValue, newValue) {
@@ -48,7 +49,7 @@ export default class extends Controller {
     const config = {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: [ChartDataLabels],
+      plugins: [window.ChartDataLabels],
       type: 'bar',
       data,
       options: {
