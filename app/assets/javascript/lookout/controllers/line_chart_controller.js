@@ -140,7 +140,7 @@ export default class extends Controller {
           }
         }
       }
-    this.chart = new Chart(this.element, options);
+    this.chart = new window.Chart(this.element, options);
 
 
     var canvas = this.element;

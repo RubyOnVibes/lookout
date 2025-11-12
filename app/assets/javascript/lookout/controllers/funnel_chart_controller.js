@@ -19,6 +19,17 @@ export default class extends Controller {
     this.funnel = JSON.parse(this.element.dataset.data);
     console.log('Funnel data:', this.funnel);
 
+    // Check if Chart.js is available
+    if (typeof window.Chart === 'undefined') {
+      console.error('Chart.js is not loaded yet');
+      return;
+    }
+
+    // Register ChartDataLabels plugin globally if available
+    if (window.ChartDataLabels && !window.Chart.registry.plugins.get('datalabels')) {
+      window.Chart.register(window.ChartDataLabels);
+    }
+
     const fontFamily = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
     const labels = this.funnel.steps.map((step) => step.name);
     const stepData = this.funnel.steps.map((step) => step.total_events);
@@ -49,7 +60,6 @@ export default class extends Controller {
     const config = {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: [window.ChartDataLabels],
       type: 'bar',
       data,
       options: {
@@ -120,7 +130,7 @@ export default class extends Controller {
 
     const visitorsData = [];
 
-    this.chart = new Chart(
+    this.chart = new window.Chart(
       this.element,
       config,
     );

@@ -8,7 +8,7 @@ export default class extends Controller {
 
   connect() {
     // Wait for Chart.js to be available
-    if (typeof Chart === 'undefined') {
+    if (typeof window.Chart === 'undefined') {
       console.error('Chart.js not loaded for sparkline:', this.labelValue);
       // Try again after a short delay
       setTimeout(() => this.renderChart(), 100);
@@ -19,7 +19,7 @@ export default class extends Controller {
   }
 
   renderChart() {
-    if (typeof Chart === 'undefined') {
+    if (typeof window.Chart === 'undefined') {
       console.error('Chart.js still not available for:', this.labelValue);
       return;
     }
@@ -28,7 +28,7 @@ export default class extends Controller {
       // Generate sample trend data (in production, pass real data via data-sparkline-data-value)
       const data = this.hasDataValue ? this.dataValue : Array.from({length: 7}, () => Math.random() * 100);
       
-      new Chart(this.element.getContext('2d'), {
+      new window.Chart(this.element.getContext('2d'), {
         type: 'line',
         data: {
           labels: data.map((_, i) => i),
